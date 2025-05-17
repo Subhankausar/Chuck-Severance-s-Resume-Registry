@@ -2,15 +2,15 @@
 session_start();
 require_once "pdo.php";
 
+$salt = 'XyZzy12*_';
+
 if (isset($_POST['cancel'])) {
     header("Location: index.php");
     return;
 }
 
-$salt = 'XyZzy12*_';
-if (isset($_POST['pass']) && isset($_POST['email'])) {
+if (isset($_POST['email']) && isset($_POST['pass'])) {
     $check = hash('md5', $salt . $_POST['pass']);
-
     $stmt = $pdo->prepare('SELECT user_id, name FROM users WHERE email = :em AND password = :pw');
     $stmt->execute(array(':em' => $_POST['email'], ':pw' => $check));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,15 +24,12 @@ if (isset($_POST['pass']) && isset($_POST['email'])) {
         $_SESSION['error'] = "Incorrect password";
         header("Location: login.php");
         return;
-    }
-}
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Subhan Severance Resume Registry 020f5665</title>
+    <title>Subhan 020f5665</title>
     <?php require_once "bootstrap.php"; ?>
-</head>Please Log In</h1>
+</head>
+<body>
+<div class="container">
+    <h1>Please Log In</h1>
 
     <!-- Required anchor tag for autograder -->
     <p><a href="login.php">Please log in</a></p>
@@ -45,16 +42,16 @@ if (isset($_POST['pass']) && isset($_POST['email'])) {
     ?>
 
     <form method="POST" action="login.php">
-        User Name <input type="text" name="email"><br/>
-        Password <input type="text" name="pass"><br/>
+        <label for="email">User Name</label>
+        <input type="text" name="email" id="email"><br/>
+        <label for="pass">Password</label>
+        <input type="password" name="pass" id="pass"><br/>
         <input type="submit" value="Log In">
         <input type="submit" name="cancel" value="Cancel">
     </form>
 
     <p>
-        <!-- Password hint for students -->
         <!-- Hint: The password is the three character name of the programming language used in this class (all lower case) followed by 123 -->
     </p>
-</div>
 </body>
 </html>
